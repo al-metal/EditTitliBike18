@@ -12,9 +12,17 @@ namespace EditTitliBike18
 {
     public partial class Form1 : Form
     {
+        string fileUrlsAllProducts;
+
+
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
