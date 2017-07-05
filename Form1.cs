@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -88,9 +89,34 @@ namespace EditTitliBike18
                     List<string> tovarB18 = nethouse.GetProductList(cookie, url);
                     if (tovarB18 == null)
                         continue;
+
+                    string oldTitle = new Regex("(?<=Артикул:).*").Match(title).ToString();
+                    string titleSEO = tovarB18[13];
+                    string article = tovarB18[6];
+                    titleSEO = titleSEO.Replace(oldTitle, " " + article);
+
+                    tovarB18[13] = titleSEO;
+                    nethouse.SaveTovar(cookie, tovarB18);
+                    edits++;
                 }
                 else
                 {
+                    List<string> tovarB18 = nethouse.GetProductList(cookie, url);
+                    if (tovarB18 == null)
+                        continue;
+
+                    string article = tovarB18[6];
+                    string titleSEO = tovarB18[13] + "Артикул " + article;
+                    titleSEO = titleSEO.Replace(".", "");
+                    if (titleSEO.Length > 255)
+                    {
+
+                        titleSEO = titleSEO.Remove(255);
+                        titleSEO = titleSEO.Remove(titleSEO.LastIndexOf(" "));
+                    }
+                    tovarB18[13] = titleSEO;
+                    nethouse.SaveTovar(cookie, tovarB18);
+
                     //List<string> tovarB18 = nethouse.GetProductList(cookie, url);
                     //if (tovarB18 == null)
                     //    continue;
