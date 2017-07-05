@@ -56,6 +56,7 @@ namespace EditTitliBike18
             ExcelPackage p = new ExcelPackage(file);
             ExcelWorksheet w = p.Workbook.Worksheets[1];
             int q = w.Dimension.Rows;
+            int edits = 0;
 
             for (int i = 2; q > i; i++)
             {
@@ -65,14 +66,32 @@ namespace EditTitliBike18
                     continue;
 
                 List<string> tovarB18 = nethouse.GetProductList(cookie, url);
+                if(tovarB18 == null)
+                    continue;
 
                 string article = tovarB18[6];
                 if (article.Contains("R00"))
                 {
+                    edits++;
+                    string titleSEO = tovarB18[13];
 
+                    if (titleSEO.Contains(tovarB18[45]))
+                        continue;
+
+                    titleSEO = titleSEO + " Bike18 " + tovarB18[45];
+                    titleSEO = titleSEO.Replace(".", "");
+                    if (titleSEO.Length > 255)
+                    {
+                        
+                        titleSEO = titleSEO.Remove(255);
+                        titleSEO = titleSEO.Remove(titleSEO.LastIndexOf(" "));
+                    }
+                    tovarB18[13] = titleSEO;
+                    nethouse.SaveTovar(cookie, tovarB18);
+                    
                 }
-
             }
+            MessageBox.Show("Удалено товаров " + edits);
 
 
         }

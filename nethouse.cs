@@ -57,6 +57,8 @@ namespace Bike18
                 }
                 string razdelDIV = new Regex("(?<=<div class=\"container-bread-crumbs\">)[\\w\\W]*?(?=<div>)").Match(otv).ToString();
                 MatchCollection allRazdels = new Regex("(?<=<a).*?</a>").Matches(razdelDIV);
+                if (allRazdels.Count == 0)
+                    return listTovar = null;
                 string razdel = allRazdels[allRazdels.Count - 1].ToString();
                 razdel = new Regex("(?<=\">).*?(?=</a>)").Match(razdel).ToString();
 
