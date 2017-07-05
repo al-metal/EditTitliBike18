@@ -61,34 +61,63 @@ namespace EditTitliBike18
             for (int i = 2; q > i; i++)
             {
                 string url = (string)w.Cells[i, 2].Value;
+                string title = (string)w.Cells[i, 11].Value;
 
                 if (url.Contains("category"))
                     continue;
 
-                List<string> tovarB18 = nethouse.GetProductList(cookie, url);
-                if(tovarB18 == null)
-                    continue;
-
-                string article = tovarB18[6];
-                if (article.Contains("R00"))
+                if (title.Contains("Купить ТОВАР"))
                 {
-                    edits++;
-                    string titleSEO = tovarB18[13];
+                    #region BIKE18
 
-                    if (titleSEO.Contains(tovarB18[45]))
+                    List<string> tovarB18 = nethouse.GetProductList(cookie, url);
+                    if (tovarB18 == null)
                         continue;
 
-                    titleSEO = titleSEO + " Bike18 " + tovarB18[45];
-                    titleSEO = titleSEO.Replace(".", "");
-                    if (titleSEO.Length > 255)
-                    {
-                        
-                        titleSEO = titleSEO.Remove(255);
-                        titleSEO = titleSEO.Remove(titleSEO.LastIndexOf(" "));
-                    }
+                    string titleSEO = tovarB18[13];
+                    string nameTovar = tovarB18[4];
+                    titleSEO = titleSEO.Replace("ТОВАР", nameTovar);
                     tovarB18[13] = titleSEO;
                     nethouse.SaveTovar(cookie, tovarB18);
-                    
+                    edits++;
+
+                    #endregion
+                }
+                else if(title.Contains("MP_"))
+                {
+                    List<string> tovarB18 = nethouse.GetProductList(cookie, url);
+                    if (tovarB18 == null)
+                        continue;
+                }
+                else
+                {
+                    //List<string> tovarB18 = nethouse.GetProductList(cookie, url);
+                    //if (tovarB18 == null)
+                    //    continue;
+
+                    //string article = tovarB18[6];
+                    //#region Racer
+                    //if (article.Contains("R00"))
+                    //{
+                    //    edits++;
+                    //    string titleSEO = tovarB18[13];
+
+                    //    if (titleSEO.Contains(tovarB18[45]))
+                    //        continue;
+
+                    //    titleSEO = titleSEO + " Bike18 " + tovarB18[45];
+                    //    titleSEO = titleSEO.Replace(".", "");
+                    //    if (titleSEO.Length > 255)
+                    //    {
+
+                    //        titleSEO = titleSEO.Remove(255);
+                    //        titleSEO = titleSEO.Remove(titleSEO.LastIndexOf(" "));
+                    //    }
+                    //    tovarB18[13] = titleSEO;
+                    //    nethouse.SaveTovar(cookie, tovarB18);
+
+                    //}
+                    //#endregion
                 }
             }
             MessageBox.Show("Удалено товаров " + edits);
